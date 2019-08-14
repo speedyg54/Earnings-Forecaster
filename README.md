@@ -1,7 +1,7 @@
 # Earnings-Forecaster
 Goal, to create a forecasting tool for short term option trading by recommending long or short plays based on Earnings Forecast
 
-This will be comprised of the following
+This will be comprised of the following:
   - A Short Term Stock Universe Creator
   - An Earnings Forecaster
   - An Options Pricer
