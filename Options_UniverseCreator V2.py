@@ -3,7 +3,7 @@
 """
 Created on Sun Aug 11 08:57:21 2019
 
-@author: OBar
+@author:
 
 Script Purpose: Create our short term stock universe.
 """
@@ -16,9 +16,11 @@ from datetime import timedelta
 
 def Earnings_Universe():
     target_day = 0 #first day in a week is sunday
-    delta_day = target_day - dt.datetime.now().isoweekday()
-    if delta_day >= 0: 
-        delta_day -= 7 # go back 7 days
+    delta_day = target_day + dt.datetime.now().isoweekday()
+    if delta_day == 7: 
+        delta_day = 0
+    elif delta_day > 0:
+        delta_day -= delta_day*2
     week_strt = dt.datetime.now() + timedelta(days=delta_day)
 
     from_1 = week_strt.strftime("%Y-%m-%d") #create from date
@@ -46,7 +48,8 @@ def Earnings_Universe():
         week_tbls[dfs] = FT_DF #push each dataframe into the dictionary
     #print(week_tbls)
     FFT_DF = pd.concat([df for df in week_tbls.values()], ignore_index=True)
-    FFT_DF = FFT_DF.loc[(FFT_DF['Earnings Call Time'] == 'After Market Close' )| (FFT_DF['Earnings Call Time'] == 'Before Market Close')] #Filter out the non Before the market or AFter the market records
+    FFT_DF = FFT_DF.groupby('Company', as_index=False, sort=False).first() #Removes any potential duplication issues from Yahoo.
+    FFT_DF = FFT_DF.loc[(FFT_DF['Earnings Call Time'] == 'After Market Close' )| (FFT_DF['Earnings Call Time'] == 'Before Market Open')] #Filter out the non Before the market or AFter the market records
     return FFT_DF
 
 
@@ -54,5 +57,6 @@ def Earnings_Universe():
 if __name__ == '__main__':
     Universe = Earnings_Universe()
     print(Universe)
+    Universe.to_csv('<INSERT YOUR PATH>', index=False)
 
 
