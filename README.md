@@ -3,7 +3,7 @@ Goal, to create a forecasting tool for short term option trading by recommending
 
 This will be comprised of the following:
   - A Short Term Stock Universe Creator
-  - A Fundamentals Extractor
+  - A Fundamentals Downloader
   - An Earnings Forecaster
   - An Options Pricer
   
